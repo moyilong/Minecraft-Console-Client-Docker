@@ -20,7 +20,7 @@ ENV RELEASE_TAG=${RELEASE_TAG}
 
 RUN git clone https://github.com/MCCTeam/Minecraft-Console-Client -b ${RELEASE_TAG} --recursive /Minecraft-Console-Client
 
-RUN dotnet build -c Release -o /app MinecraftClient.sln
+RUN dotnet build -c Release -o /app MinecraftClient/MinecraftClient.csproj
 
 
 FROM base
