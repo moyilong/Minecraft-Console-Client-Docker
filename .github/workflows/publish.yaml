@@ -99,4 +99,9 @@ jobs:
 
           git add release-mark.txt
           git commit -m "Update external release tag to ${{ steps.latest.outputs.tag }}" || exit 0
-          git push
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        if: steps.compare.outputs.changed == 'true'
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
