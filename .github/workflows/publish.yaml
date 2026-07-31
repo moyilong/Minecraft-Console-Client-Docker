@@ -84,10 +84,8 @@ jobs:
           push: true
           platforms: linux/amd64, linux/arm64/v8
           tags: |
-            ghcr.io/${{ github.repository_owner }}/minecraft-console-client:latest
-            ghcr.io/${{ github.repository_owner }}/minecraft-console-client:${{ steps.latest.outputs.tag }}
-          build-args: |
-            RELEASE_TAG=${{ steps.latest.outputs.tag }}
+            ghcr.io/${{ github.repository_owner }}/minecraft-console-client-docker:latest
+            ghcr.io/${{ github.repository_owner }}/minecraft-console-client-docker:${{ steps.latest.outputs.tag }}
 
 
       - name: Save latest release tag
