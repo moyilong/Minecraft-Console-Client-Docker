@@ -61,6 +61,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: actions/setup-dotnet@v6
+        if: steps.compare.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        with:
+          dotnet-version: '10.0'
+
+      - name: Clone & Build
+        if: steps.compare.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          git clone  https://github.com/MCCTeam/Minecraft-Console-Client -b ${{ steps.latest.outputs.tag }} --recursive Minecraft-Console-Client;
+          cd Minecraft-Console-Client && \
+          dotnet build -o ../app -c Release
+
+
       - name: Build docker and push to GHCR
         uses: docker/build-push-action@v7
         if: steps.compare.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
@@ -68,7 +81,9 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64, linux/arm64/v8
-          tags: ghcr.io/${{ github.repository_owner }}/minecraft-console-client:latest
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/minecraft-console-client:latest
+            ghcr.io/${{ github.repository_owner }}/minecraft-console-client:${{ steps.latest.outputs.tag }}
           build-args: |
             RELEASE_TAG=${{ steps.latest.outputs.tag }}
 
