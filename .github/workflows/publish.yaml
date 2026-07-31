@@ -69,10 +69,8 @@ jobs:
       - name: Clone & Build
         if: steps.compare.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         run: |
-          git clone  https://github.com/MCCTeam/Minecraft-Console-Client -b ${{ steps.latest.outputs.tag }} --recursive Minecraft-Console-Client;
-          cd Minecraft-Console-Client && \
-          dotnet build -o ../app -c Release
-
+          git clone https://github.com/MCCTeam/Minecraft-Console-Client -b ${{ steps.latest.outputs.tag }} --recursive Minecraft-Console-Client;
+          dotnet build -o ./app -c Release Minecraft-Console-Client/MinecraftClient/MinecraftClient.csproj
 
       - name: Build docker and push to GHCR
         uses: docker/build-push-action@v7
