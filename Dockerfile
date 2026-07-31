@@ -13,8 +13,9 @@ FROM base AS build
 RUN apt install -y git
 
 WORKDIR /Minecraft-Console-Client
-
-RUN git clone https://github.com/MCCTeam/Minecraft-Console-Client -b 20260719-481 --recursive /Minecraft-Console-Client
+ARG RELEASE_TAG
+ENV RELEASE_TAG=${RELEASE_TAG}
+RUN git clone https://github.com/MCCTeam/Minecraft-Console-Client -b ${RELEASE_TAG} --recursive /Minecraft-Console-Client
 
 RUN dotnet build -c Release -o /app MinecraftClient.sln
 
