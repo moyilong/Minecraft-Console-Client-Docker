@@ -65,6 +65,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Log in to ACR
+        uses: docker/login-action@v2
+        if: steps.compare.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        with:
+          registry: registry.cn-hangzhou.aliyuncs.com
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
       - uses: actions/setup-dotnet@v6
         if: steps.compare.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         with:
@@ -91,6 +99,8 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/minecraft-console-client-docker:latest
             ghcr.io/${{ github.repository_owner }}/minecraft-console-client-docker:${{ steps.latest.outputs.tag }}
+            ${{ secrets.ACR_REGISTRY_TAG }}:latest
+            registry.cn-hangzhou.aliyuncs.com/zephyruse/mc-client:${{ steps.latest.outputs.tag }}
 
 
       - name: Save latest release tag
